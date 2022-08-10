@@ -13,6 +13,7 @@ function SelectSeat(props) {
         return seat1.seatId - seat2.seatId
     })
     const [seatInfo, setSeatInfo] = useState("还未选择座位")
+    const [selectedSeatIds, setSelectedSeatIds] = useState({});
     const [seatInfoTable,setSeatInfoTable] = useState({})
     const [selectedState ] = useState(new Array(24).fill(false))
     const [ count, setCount ] = useState(0);
@@ -24,6 +25,7 @@ function SelectSeat(props) {
                 const img = document.getElementById(index);
                 img.src = selected; 
                 seatInfoTable[index] = `${seatList[index].seatRow + 1}排 ${seatList[index].seatCol + 1}座`
+                selectedSeatIds[index] = seatList[index].seatId;
                 let message = "";
                 Object.keys(seatInfoTable).forEach((key) => {
                     message +="[" + seatInfoTable[key] + "]"+ ",  "; 
@@ -37,7 +39,8 @@ function SelectSeat(props) {
                 setCount(count - 1);
                 const img = document.getElementById(index);
                 img.src = unSold; 
-                delete seatInfoTable[index];
+                delete seatInfoTable[index]
+                delete selectedSeatIds[index]
                 let message = "";
                 Object.keys(seatInfoTable).forEach((key) => {
                     message +="[" + seatInfoTable[key] + "]"+ ",  ";; 
@@ -111,7 +114,7 @@ function SelectSeat(props) {
                     <div>原价：￥{session.cinemaMovieTimePrice} × {count}</div>
                     <div>总计：{count * session.cinemaMovieTimePrice}</div>
                 </div>
-                <button onClick={() => { showModal(session, seatInfo, count) }}>确认下单</button>
+                <button onClick={() => { showModal(session, seatInfo, count, Object.values(selectedSeatIds)) }}>确认下单</button>
             </div>
         </div>
         

@@ -4,6 +4,7 @@ import { useState,useEffect } from 'react';
 import { Button,DatePicker, Modal  } from "antd";
 import { useParams } from 'react-router-dom'
 import { getSessions,getMovieDetail,getSessionSeats } from '../api/ticketSelect'
+import { postOrder } from '../api/order'
 import SelectSeat from '../components/SelectSeat';
 import OrderDetails from '../components/OrderDetails'
 
@@ -17,6 +18,7 @@ const TicketSelect = () => {
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [count, setCount] = useState(0);
     const [seatInfo, setSeatInfo] = useState("");
+    const [seatIds, setSeatIds] = useState([]);
 
     const { id } = useParams();
 
@@ -47,18 +49,29 @@ const TicketSelect = () => {
         })
     }
 
-    const showModal = (session, seatInfo, count) => {
+    const showModal = (session, seatInfo, count, seatIds) => {
         setSeatInfo(seatInfo)
         setCount(count);
         setVisible(true);
+        setSeatIds(seatIds);
       };
     
     const handleOk = () => {
         setConfirmLoading(true);
-        
+        const usersId = parseInt(JSON.parse(sessionStorage.getItem("user")).userId)
+        const ticketPrice = session.cinemaMovieTimePrice * count;
+        const movieId = details.movieId
+        const cinemaId = session.cinemaId
+        const cinemaMovieTimeId = session.cinemaMovieTimeId
+        const boughtSeatIdList = seatIds
+        const order = { ticketPrice, usersId, cinemaId,movieId, cinemaMovieTimeId, boughtSeatIdList }
+
+        postOrder(order).then((response)=>{
+            console.log(response)
+        })
         setTimeout(() => {
-        setVisible(false);
-        setConfirmLoading(false);
+            setVisible(false);
+            setConfirmLoading(false);
         }, 2000);
     };
     
