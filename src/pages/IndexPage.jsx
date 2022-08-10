@@ -16,7 +16,7 @@ const IndexPage = () => {
     return (
         <div>
             <Carousel />
-            <div className='title'>全部电影</div>
+            <div className='recommend-title'>推荐电影</div>
             <div className='movies-recommend'>
                 {
                     movieList.map((item,index) => (

@@ -5,6 +5,7 @@ import { getSessions,getMovieDetail,getSessionSeats } from '../api/ticketSelect'
 import { Button,DatePicker } from "antd";
 import SelectSeat from '../components/SelectSeat';
 import { useParams } from 'react-router-dom'
+import TicketAnimation from '../components/TicketAnimation';
 
 const TicketSelect = () => {
 
@@ -46,6 +47,7 @@ const TicketSelect = () => {
 
     return (
          <div>
+            <TicketAnimation />
             <div className="Detail-Movie">
                 <img className='movie-cover' src={details.movieImage} alt="cover" />
                 <div className="DetailIntroduce">

@@ -1,11 +1,12 @@
 import React from 'react'
 import { useState , useEffect} from 'react'
-import { Row, Col } from 'antd'
+import { Row, Col,Button } from 'antd'
 import "../assets/less/SelectSeat.less"
 import  unSold from "../assets/images/unsold.png"
 import  sold from "../assets/images/sold.png"
 import  selected from "../assets/images/select.png"
-import { getSeats } from "../api/login"
+import { useDispatch } from 'react-redux';
+import { changeVisible } from './MovieSlice'
 
 
 function SelectSeat(props) {
@@ -17,6 +18,11 @@ function SelectSeat(props) {
     const [seatInfo, setSeatInfo] = useState("还未选择座位")
     const [seatInfoTable,setSeatInfoTable] = useState({})
     const [selectedState ] = useState(new Array(24).fill(false))
+    const dispatch = useDispatch();
+
+    const appear = () => {
+        dispatch(changeVisible());
+    }
 
     const select = (index) => {
         if(seatList[index].seatReserve === false ){
@@ -105,7 +111,7 @@ function SelectSeat(props) {
                     <div>原价：￥43.00 × 1</div>
                     <div>总计：</div>
                 </div>
-                <button>确认下单</button>
+                <button onClick={() => {appear()}}>确认下单</button>
             </div>
         </div>
         
