@@ -11,7 +11,7 @@ export default function OrderPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await getTicketInfo(1);
+      const { data } = await getTicketInfo(JSON.parse(sessionStorage.getItem("user")).userId);
       setTicketInfo(data);
     };
     fetchData();
