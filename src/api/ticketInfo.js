@@ -1,0 +1,9 @@
+import api from "./api"
+
+export const getTicketInfo = (userId) => {
+    return api.get("/ticket/" + userId)
+};
+
+export const deleteTicket = (id) => {
+    return api.delete(`/ticket/delete/${id}`)
+};

@@ -8,6 +8,7 @@ import TicketSelect from "./pages/TicketSelect";
 import SelectSeat from "./components/SelectSeat";
 import MovieByCategory from "./pages/MovieByCategory";
 
+import OrderPage from "./pages/OrderPage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/movies/:id" element={<MoviesPage />} />
           <Route path="/ticket/:id" element={<TicketSelect />} />
           <Route path="/movies" element={<MovieByCategory />} />
+          <Route path="/user" element={<OrderPage />} />
         </Route>
         <Route path="register" element={<Register />} />
         <Route path="login" element={<Login />} />
