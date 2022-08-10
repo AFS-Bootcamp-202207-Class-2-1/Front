@@ -1,5 +1,5 @@
 import React from 'react';
-import detail_introduce_icon from '../assets/iconfont/detail_introduce_icon.png'
+import detail_introduce_icon from '../../assets/iconfont/detail_introduce_icon.png'
 
 const MovieIntroduceHeader = (props) => {
     const {movie} = props;

@@ -12,6 +12,8 @@ const TicketSelect = () => {
     const [sessionSeats,setSessionSeats] = useState([])
     const [cinemaMovieTimePrice, setCinemaMovieTimePrice] = useState(0)
     const [details,setDetails] = useState({})
+    const [isVisible,setIsVisible] = useState(false)
+
     const { id } = useParams();
 
     useEffect(() => {

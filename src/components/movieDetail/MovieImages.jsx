@@ -1,6 +1,6 @@
 import { Row, Col, Image } from 'antd'
 import React from 'react'
-import detail_images_icon from '../assets/iconfont/detail_images_icon.png'
+import detail_images_icon from '../../assets/iconfont/detail_images_icon.png'
 
 function MovieImages(props) {
     const {movie} = props;

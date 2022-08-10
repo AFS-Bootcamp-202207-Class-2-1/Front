@@ -1,6 +1,6 @@
 import React from 'react';
 import { Rate } from 'antd'
-import '../assets/less/MovieDetails.less'
+import '../../assets/less/MovieDetails.less'
 
 const MovieDetails = (props) => {
     const { movie } = props;
