@@ -1,32 +1,38 @@
 import React from 'react';
 import '../assets/less/ticketSession.less'
 import { useState,useEffect } from 'react';
-import { getSessions,getMovieDetail,getSessionSeats } from '../api/ticketSelect'
-import { Button,DatePicker } from "antd";
-import SelectSeat from '../components/SelectSeat';
+import { Button,DatePicker, Modal  } from "antd";
 import { useParams } from 'react-router-dom'
+import { getSessions,getMovieDetail,getSessionSeats } from '../api/ticketSelect'
+import { postOrder } from '../api/order'
+import SelectSeat from '../components/SelectSeat';
+import OrderDetails from '../components/OrderDetails'
 
 const TicketSelect = () => {
 
     const [sessionList,setSessionList] = useState([])
     const [sessionSeats,setSessionSeats] = useState([])
-    const [cinemaMovieTimePrice, setCinemaMovieTimePrice] = useState(0)
+    const [session, setSession] = useState({});
     const [details,setDetails] = useState({})
-    const [isVisible,setIsVisible] = useState(false)
+    const [visible, setVisible] = useState(false);
+    const [confirmLoading, setConfirmLoading] = useState(false);
+    const [count, setCount] = useState(0);
+    const [seatInfo, setSeatInfo] = useState("");
+    const [seatIds, setSeatIds] = useState([]);
 
     const { id } = useParams();
 
     useEffect(() => {
-        getMovieDetail(id).then((response) => {
+        getMovieDetail(id).then(async(response) => {
             setDetails(response.data)
         });
          getSessions(id).then(async (response) => {
             await setSessionList(response.data)
-            console.log(response.data)
+            // await setCinemaMovieTimePrice(response.data[1].cinemaMovieTimePrice)
             return response.data
         }).then(async (response)=>{
+            await setSession(response[1])
             await getSessionSeats(response[1].cinemaMovieTimeId).then((response) => {
-                console.log(response.data)
                 setSessionSeats(response.data)
             })
         })
@@ -36,13 +42,44 @@ const TicketSelect = () => {
         console.log(date, dateString);
     };
 
-    const selectSession = (id) => {
-
+    const selectSession = (id, index) => {
+        setSession(sessionList[index])
         getSessionSeats(id).then((response) => {
-            console.log(response.data)
             setSessionSeats(response.data)
         })
     }
+
+    const showModal = (session, seatInfo, count, seatIds) => {
+        setSeatInfo(seatInfo)
+        setCount(count);
+        setVisible(true);
+        setSeatIds(seatIds);
+      };
+    
+    const handleOk = () => {
+        setConfirmLoading(true);
+        const usersId = parseInt(JSON.parse(sessionStorage.getItem("user")).userId)
+        const ticketPrice = session.cinemaMovieTimePrice * count;
+        const movieId = details.movieId
+        const cinemaId = session.cinemaId
+        const cinemaMovieTimeId = session.cinemaMovieTimeId
+        const boughtSeatIdList = seatIds
+        const order = { ticketPrice, usersId, cinemaId,movieId, cinemaMovieTimeId, boughtSeatIdList }
+
+        postOrder(order).then((response)=>{
+            console.log(response)
+        })
+        setTimeout(() => {
+            setVisible(false);
+            setConfirmLoading(false);
+        }, 2000);
+    };
+    
+    const handleCancel = () => {
+        console.log('Clicked cancel button');
+        setVisible(false);
+    };
+    
 
     return (
          <div>
@@ -57,7 +94,7 @@ const TicketSelect = () => {
                         <div className='session-selector'>
                             {
                                 sessionList.map((item,index) => (
-                                    <Button key={index} value={item} onClick={()=>{ selectSession(item.cinemaMovieTimeId) }}>{item.cinemaName} {item.cinemaMovieTimeWatchtime} {item.cinemaMovieTimeEndtime}</Button>
+                                    <Button key={index} value={item} onClick={()=>{ selectSession(item.cinemaMovieTimeId, index) }}>{item.cinemaName} {item.cinemaMovieTimeWatchtime} {item.cinemaMovieTimeEndtime}</Button>
                             ))}
                         </div>
                     </div>
@@ -66,7 +103,18 @@ const TicketSelect = () => {
                     {details.movieScore}
                 </div>
             </div>
-         <SelectSeat seatList={sessionSeats}/>
+         <SelectSeat seatList={sessionSeats} showModal={showModal}  session = {session} details= {details}/>
+         <Modal
+            title="确认订单"
+            visible={visible}
+            onOk={handleOk}
+            confirmLoading={confirmLoading}
+            onCancel={handleCancel}
+            okText="确认"
+            cancelText="取消"
+        >
+         <OrderDetails details= {details} session = { session} count = {count} seatInfo={seatInfo}/>
+      </Modal>
         </div>
     );
 };
