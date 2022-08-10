@@ -11,16 +11,18 @@ export default function OrderPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await getTicketInfo(JSON.parse(sessionStorage.getItem("user")).userId);
+      const { data } = await getTicketInfo(
+        JSON.parse(sessionStorage.getItem("user")).userId
+      );
       setTicketInfo(data);
     };
     fetchData();
-  }, []);
+  }, ticketInfo);
 
-  const deleteSelectedTicket = () => {
-    // deleteTicket().then(() => {
-    //   console.log("调用删除接口");
-    // });
+  const deleteSelectedTicket = (id) => {
+    deleteTicket(id).then(() => {
+      console.log("调用删除接口");
+    });
   };
 
   const showDeleteConfirm = (id) => {
@@ -30,8 +32,8 @@ export default function OrderPage() {
       okText: "Yes",
       okType: "danger",
       cancelText: "No",
-
       onOk() {
+        console.log("OK");
         deleteSelectedTicket(id);
       },
 

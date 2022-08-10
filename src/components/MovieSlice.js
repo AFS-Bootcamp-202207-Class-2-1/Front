@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const movieSlice = createSlice ({
     name: "Movie",
     initialState:{
-        isVisible: true,
+        isVisible: false,
     },
     reducers:{
         changeVisible: (state,action) => {
