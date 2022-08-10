@@ -10,7 +10,7 @@ const MovieItem = (props) => {
             <NavLink to={`/movies/${value.movieId}`}><img className='movie-img' src={value.movieImage} /></NavLink>
             <div className='movie-description'>
                 <div className='title-row'>
-                    <span className='movie-name'>{value.movieName}</span>
+                <NavLink to={`/movies/${value.movieId}`}><span className='movie-name'>{value.movieName}</span></NavLink>
                     <span className='movie-rating'>{value.movieScore}</span>
                 </div>
                 <div className='movie-introduction'>

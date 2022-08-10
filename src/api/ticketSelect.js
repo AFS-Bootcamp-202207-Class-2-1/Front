@@ -5,7 +5,7 @@ export const getSessions = (id) => {
 };
 
 export const getSessionSeats = (id) => {
-    return api.get(`/session/${id}`)
+    return api.get(`/seat/${id}`)
 };
 
 export const getMovieDetail = (id) => {

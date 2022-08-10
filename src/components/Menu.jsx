@@ -27,7 +27,7 @@ const Menu = () => {
                 <NavLink to="/movies">电影</NavLink>
               </li>
               <li>
-                <NavLink to="/user">我的</NavLink>
+                <NavLink to="/user">订单</NavLink>
               </li>
             </ul>
           </Col>
@@ -40,7 +40,7 @@ const Menu = () => {
               ></Button>
               {sessionStorage.getItem("user") == null
                 ? "登录"
-                : JSON.parse(sessionStorage.getItem("user")).username}
+                : JSON.parse(sessionStorage.getItem("user")).userName}
             </a>
           </Col>
         </Row>
