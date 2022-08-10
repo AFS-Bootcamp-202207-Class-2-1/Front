@@ -6,6 +6,7 @@ import Register from "./pages/Register";
 import MoviesPage from "./pages/MoviesPage";
 import TicketSelect from "./pages/TicketSelect";
 import SelectSeat from "./components/SelectSeat";
+import OrderPage from "./pages/OrderPage";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route index element={<IndexPage />} />
           <Route path="/movies/:id" element={<MoviesPage />} />
           <Route path="/ticket/:id" element={<TicketSelect />} />
+          <Route path="/user" element={<OrderPage />} />
         </Route>
         <Route path="register" element={<Register />} />
         <Route path="login" element={<Login />} />
