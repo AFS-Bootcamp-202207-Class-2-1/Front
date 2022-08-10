@@ -20,11 +20,11 @@ const TicketSelect = () => {
         });
          getSessions(id).then(async (response) => {
             await setSessionList(response.data)
-            console.log(response.data)
+            // await setCinemaMovieTimePrice(response.data[1].cinemaMovieTimePrice)
             return response.data
         }).then(async (response)=>{
+            await setCinemaMovieTimePrice(response[1].cinemaMovieTimePrice)
             await getSessionSeats(response[1].cinemaMovieTimeId).then((response) => {
-                console.log(response.data)
                 setSessionSeats(response.data)
             })
         })
@@ -35,9 +35,7 @@ const TicketSelect = () => {
     };
 
     const selectSession = (id) => {
-
         getSessionSeats(id).then((response) => {
-            console.log(response.data)
             setSessionSeats(response.data)
         })
     }
@@ -64,7 +62,7 @@ const TicketSelect = () => {
                     {details.movieScore}
                 </div>
             </div>
-         <SelectSeat seatList={sessionSeats}/>
+         <SelectSeat seatList={sessionSeats} price= {cinemaMovieTimePrice}/>
         </div>
     );
 };

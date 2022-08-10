@@ -5,18 +5,18 @@ import "../assets/less/SelectSeat.less"
 import  unSold from "../assets/images/unsold.png"
 import  sold from "../assets/images/sold.png"
 import  selected from "../assets/images/select.png"
-import { getSeats } from "../api/login"
-
 
 function SelectSeat(props) {
 
-    const { seatList } = props
+    const { seatList, price } = props
+    console.log(props)
     seatList.sort((seat1, seat2) => {
         return seat1.seatId - seat2.seatId
     })
     const [seatInfo, setSeatInfo] = useState("还未选择座位")
     const [seatInfoTable,setSeatInfoTable] = useState({})
     const [selectedState ] = useState(new Array(24).fill(false))
+    const [ count, setCount ] = useState(0);
 
     const select = (index) => {
         if(seatList[index].seatReserve === false ){
@@ -29,11 +29,13 @@ function SelectSeat(props) {
                 Object.keys(seatInfoTable).forEach((key) => {
                     message +="[" + seatInfoTable[key] + "]"+ ",  "; 
                 })
+                setCount(count + 1);
                 message = message.slice(0,message.length - 2);
                 setSeatInfo(message)
                 
             } else {
                 selectedState[index] = false;
+                setCount(count - 1);
                 const img = document.getElementById(index);
                 img.src = unSold; 
                 delete seatInfoTable[index];
@@ -102,8 +104,8 @@ function SelectSeat(props) {
                     <div><span>座位：{seatInfo}</span></div>
                 </div>
                 <div className='price'>
-                    <div>原价：￥43.00 × 1</div>
-                    <div>总计：</div>
+                    <div>原价：￥{price} × 1</div>
+                    <div>总计：{count * price}</div>
                 </div>
                 <button>确认下单</button>
             </div>
