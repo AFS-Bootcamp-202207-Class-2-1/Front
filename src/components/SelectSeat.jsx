@@ -8,8 +8,7 @@ import  selected from "../assets/images/select.png"
 
 function SelectSeat(props) {
 
-    const { seatList, price } = props
-    console.log(props)
+    const { seatList, showModal, session, details} = props
     seatList.sort((seat1, seat2) => {
         return seat1.seatId - seat2.seatId
     })
@@ -24,13 +23,13 @@ function SelectSeat(props) {
                 selectedState[index] = true
                 const img = document.getElementById(index);
                 img.src = selected; 
-                seatInfoTable[index] = `${seatList[index].seatRow + 1}行 ${seatList[index].seatCol + 1}列`
+                seatInfoTable[index] = `${seatList[index].seatRow + 1}排 ${seatList[index].seatCol + 1}座`
                 let message = "";
                 Object.keys(seatInfoTable).forEach((key) => {
                     message +="[" + seatInfoTable[key] + "]"+ ",  "; 
                 })
                 setCount(count + 1);
-                message = message.slice(0,message.length - 2);
+                message = message.slice(0,message.length - 3);
                 setSeatInfo(message)
                 
             } else {
@@ -41,10 +40,15 @@ function SelectSeat(props) {
                 delete seatInfoTable[index];
                 let message = "";
                 Object.keys(seatInfoTable).forEach((key) => {
-                    message +=seatInfoTable[key] + ", "; 
+                    message +="[" + seatInfoTable[key] + "]"+ ",  ";; 
                 })
-                message = message.slice(0,message.length - 2);
-                setSeatInfo(message)
+                message = message.slice(0,message.length - 3);
+                if(message.length === 0){
+                    setSeatInfo("还未选择座位")
+                } else {
+                    setSeatInfo(message)
+                }
+                
             }
         }
     }
@@ -52,7 +56,7 @@ function SelectSeat(props) {
     return (
         <div className='seat-wapper'>
             <div className='Seat'>
-                <div className='title'>111</div>
+                <div className='title'>{session.cinemaName}</div>
                 <div className='seatBody'>
                     <Row gutter={[48,48]} align="middle" >
                         <Col span={4} ><h2>1</h2></Col>
@@ -98,16 +102,16 @@ function SelectSeat(props) {
             </div>
             <div className='Ticket'>
                 <div className='info'>
-                    <div><span>影院:</span> CV影院</div>
-                    <div><span>版本:</span> 原版2D</div>
-                    <div><span>场次：</span>8月8日（周一） 22：35</div>
+                    <div><span>影院:</span> {session.cinemaName}</div>
+                    <div><span>版本:</span> {details.movieVersion}</div>
+                    <div><span>场次：</span>{session.cinemaMovieTimeWatchtime}</div>
                     <div><span>座位：{seatInfo}</span></div>
                 </div>
                 <div className='price'>
-                    <div>原价：￥{price} × 1</div>
-                    <div>总计：{count * price}</div>
+                    <div>原价：￥{session.cinemaMovieTimePrice} × {count}</div>
+                    <div>总计：{count * session.cinemaMovieTimePrice}</div>
                 </div>
-                <button>确认下单</button>
+                <button onClick={() => { showModal(session, seatInfo, count) }}>确认下单</button>
             </div>
         </div>
         
