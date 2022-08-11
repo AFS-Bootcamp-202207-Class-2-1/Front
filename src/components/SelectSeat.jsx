@@ -117,7 +117,6 @@ function SelectSeat(props) {
                 <button onClick={() => { showModal(session, seatInfo, count, Object.values(selectedSeatIds)) }}>确认下单</button>
             </div>
         </div>
-        
     )
 }
 
