@@ -50,8 +50,33 @@ const MovieByCategory = () => {
     }
   };
 
+  const onSearch = (value) => {
+    if (value.trim("") !== "") {
+      console.log(value);
+      let searchValue = {};
+      searchValue.name = value;
+      searchValue.page = 1;
+      searchValue.pageSize = 12;
+      getMoviesBySearch(searchValue).then((response) => {
+        setMovieList(response.data);
+        setTotal(response.data.totalSize);
+      });
+    } else {
+      getMoviesByPage(1).then((response) => {
+        setMovieList(response.data.categoryMovieInfoList);
+        setTotal(response.data.totalSize);
+      });
+    }
+  };
+
   return (
     <div>
+      <Search
+        placeholder="Search movies"
+        allowClear
+        onSearch={onSearch}
+        enterButton
+      />
       <div className="category-list">
         <img src={movieCategory} alt="logo" className="movie-images-icon" />
         <div className="type">分类: </div>
