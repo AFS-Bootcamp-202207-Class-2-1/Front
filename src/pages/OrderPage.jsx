@@ -48,15 +48,25 @@ export default function OrderPage() {
 
   return (
     <div className="card">
-      <Card title="我的订单">
+      <Card title="我的订单" className="title">
         {ticketInfo.map((item, index) => {
           return (
             <Card
               style={{ marginTop: 16 }}
               type="inner"
-              title={`${ticketInfo[index].ticketBuytime.substring(0, 10)} 
-                imovie订单号:    
-                ${ticketInfo[index].ticketUuid}`}
+              // title={`${ticketInfo[index].ticketBuytime.substring(0, 10)}
+              //   imovie订单号:
+              //   ${ticketInfo[index].ticketUuid}`}
+              title={
+                <div>
+                  <span className="buyTime">
+                    {ticketInfo[index].ticketBuytime.substring(0, 10)}
+                  </span>
+                  <span className="ticketNumber">
+                    {"imovie订单号:" + ticketInfo[index].ticketUuid}
+                  </span>
+                </div>
+              }
               hoverable={true}
               extra={
                 <DeleteOutlined
