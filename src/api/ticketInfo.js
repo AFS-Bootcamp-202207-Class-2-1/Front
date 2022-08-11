@@ -7,3 +7,7 @@ export const getTicketInfo = (userId) => {
 export const deleteTicket = (id) => {
     return api.delete(`/ticket/delete/${id}`)
 };
+
+export const addComment = (message) =>{
+    return api.post("/comment/addComment",message)
+}

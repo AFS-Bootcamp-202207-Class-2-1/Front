@@ -1,32 +1,46 @@
 import React, { useState } from "react";
-import { Card, Row, Col, Modal, Button, Input } from "antd";
+import { Card, Row, Col, Modal, Button, Input, } from "antd";
+import { NavLink } from 'react-router-dom';
 import "../assets/less/orderPage.less";
 import { useEffect } from "react";
-import { getTicketInfo, deleteTicket } from "../api/ticketInfo";
+import { getTicketInfo, deleteTicket,addComment } from "../api/ticketInfo";
 import { DeleteOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
+const { TextArea } = Input;
 
 export default function OrderPage() {
   const { confirm } = Modal;
   const [ticketInfo, setTicketInfo] = useState([]);
   const [visible, setVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState("Content of the modal");
+  const [movieId, setMovieId] = useState(0);
+  const [commentContent, setCommentContent] = useState('');
 
-  const showModal = () => {
+  const showModal = (id) => {
+    setMovieId(id)
     setVisible(true);
   };
 
   const handleOk = () => {
-    setModalText("The modal will be closed after two seconds");
     setConfirmLoading(true);
+    const commendMessage = {
+      movieId:movieId,
+      commentContent:commentContent,
+      usersId: parseInt(JSON.parse(sessionStorage.getItem("user")).userId)
+    }
+    addComment(commendMessage).then((response)=> {
+      console.log(response)
+    })
     setTimeout(() => {
       setVisible(false);
       setConfirmLoading(false);
     }, 2000);
   };
 
+  const changeValue = (event) => {
+    const value = event.target.value;
+    setCommentContent(value);
+}
   const handleCancel = () => {
-    console.log("Clicked cancel button");
     setVisible(false);
   };
 
@@ -97,11 +111,13 @@ export default function OrderPage() {
             >
               <Row gutter={16}>
                 <Col span={4}>
+                  <NavLink to={`/movies/${ticketInfo[index].movieId}`}>
                   <img
                     src={ticketInfo[index].movieImage}
                     alt=""
                     className="picture"
                   />
+                  </NavLink>
                 </Col>
                 <Col span={6}>
                   <div className="info">
@@ -121,8 +137,8 @@ export default function OrderPage() {
                   <div className="price">¥{ticketInfo[index].ticketPrice}</div>
                 </Col>
                 <Col className="gutter-row" span={6}>
-                  <Button type="primary" onClick={showModal}>
-                    Comment
+                  <Button type="primary" onClick={() => {showModal(ticketInfo[index].movieId)}} size='large'>
+                    写影评
                   </Button>
                 </Col>
               </Row>
@@ -131,13 +147,13 @@ export default function OrderPage() {
         })}
       </Card>
       <Modal
-        title="Comment"
+        title="影评"
         visible={visible}
         onOk={handleOk}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
       >
-        <Input placeholder="Please input your comment" />
+        <TextArea rows={4} placeholder="请写下你的影评..." value={commentContent} onChange={changeValue}/>
       </Modal>
     </div>
   );
