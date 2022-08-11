@@ -16,7 +16,7 @@ function MoviesPage(props){
         getMovieDetail(id).then((response) => {
             setMovie(response.data)
         })
-    })
+    },[])
 
 
     return (

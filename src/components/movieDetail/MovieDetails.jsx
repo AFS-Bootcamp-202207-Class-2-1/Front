@@ -1,5 +1,6 @@
 import React from 'react';
 import { Rate } from 'antd'
+import { NavLink } from "react-router-dom";
 import '../../assets/less/MovieDetails.less'
 
 const MovieDetails = (props) => {
@@ -13,7 +14,7 @@ const MovieDetails = (props) => {
                 <div className="fs-14 black-1 mt-20">片长： {movie.movieTime}分钟</div>
                 <Rate allowHalf disabled  count={5} defaultValue={2.5}  value={movie.movieScore / 2} className="mt-13"/>
                 <div className="fs-14 black-1 mt-20">主演： {movie.moviePerformers}</div>
-                <a href={`/ticket/${movie.movieId}`}><button className="button mt-28">立马购票</button></a>
+                <NavLink to={`/ticket/${movie.movieId}`}><button className="button mt-28">立马购票</button></NavLink>
             </div>
         </div>
     );

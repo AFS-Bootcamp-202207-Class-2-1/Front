@@ -30,13 +30,14 @@ const MovieByCategory = () => {
 
   const MoviesByCategory = (id, page) => {
     getMoviesByCategory(id, page).then((response) => {
-      setMovieList(response.data);
+      setMovieList(response.data.categoryMovieInfoList);
       setTotal(response.data.totalSize);
       setCategoryId(id);
     });
   };
 
   const getNewMoviesByPage = (page) => {
+    console.log(categoryId)
     if (categoryId == 0) {
       getMoviesByPage(page).then((response) => {
         setMovieList(response.data.categoryMovieInfoList);
@@ -44,7 +45,7 @@ const MovieByCategory = () => {
       });
     } else {
       getMoviesByCategory(categoryId, page).then((response) => {
-        setMovieList(response.data);
+        setMovieList(response.data.categoryMovieInfoList);
         setTotal(response.data.totalSize);
       });
     }
@@ -92,6 +93,7 @@ const MovieByCategory = () => {
               <span>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</span>
             </a>
           ))}
+            <a className="category-content" onClick={()=>{ setCategoryId(0);getNewMoviesByPage(1) }}>全部</a>
         </div>
       </div>
       <div className="movies-category">
