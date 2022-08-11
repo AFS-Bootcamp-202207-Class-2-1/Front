@@ -17,11 +17,14 @@ export default function OrderPage() {
       setTicketInfo(data);
     };
     fetchData();
-  }, ticketInfo);
+  }, []);
 
   const deleteSelectedTicket = (id) => {
-    deleteTicket(id).then(() => {
-      console.log("调用删除接口");
+    deleteTicket(id).then(async () => {
+      const { data } = await getTicketInfo(
+        JSON.parse(sessionStorage.getItem("user")).userId
+      );
+      setTicketInfo(data);
     });
   };
 
