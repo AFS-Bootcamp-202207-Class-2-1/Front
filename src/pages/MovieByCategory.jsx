@@ -3,39 +3,62 @@ import React from 'react';
 import { NavLink } from 'react-router-dom'
 import '../assets/less/movieCatagory.less';
 import movieCategory from '../assets/iconfont/category.png';
-import { getMovies } from '../api';
+import { getMoviesByPage,getMoviesByCategory,getAllMoviesType } from '../api/category';
 import { Pagination } from "antd";
 
 const MovieByCategory = () => {
     const [movieList, setMovieList] = useState([]);
     const [typeList, setTypeList] = useState([]);
+    const [categoryId, setCategoryId] = useState(0);
+    const [total, setTotal] = useState(0);
 
     useEffect(() => {
-        getMovies().then((response) => {
-            setMovieList(response.data)
+        getMoviesByPage(1).then((response) => {
+            setMovieList(response.data.categoryMovieInfoList)
+            setTotal(response.data.totalSize)
+        })
+        getAllMoviesType().then((response) => {
+            setTypeList(response.data)
         })
     }, [])
 
-    const getNewMoviesByPage = (pageSize) => {
-        console.log(pageSize)
+    const MoviesByCategory = (id,page) => {
+        getMoviesByCategory(id,page).then((response) => {
+            setMovieList(response.data)
+            setTotal(response.data.totalSize)
+            setCategoryId(id);
+        })
+    }
+
+    const getNewMoviesByPage = (page) => {
+        if (categoryId == 0) {
+            getMoviesByPage(page).then((response) => {
+                setMovieList(response.data.categoryMovieInfoList)
+                setTotal(response.data.totalSize)
+            })
+        } else {
+            getMoviesByCategory(categoryId,page).then((response) => {
+                setMovieList(response.data)
+                setTotal(response.data.totalSize)
+            })
+        }
     }
 
     return (
         <div>
             <div className="category-list">
                 <img src={movieCategory} alt="logo" className="movie-images-icon"/>
-                <span className='type'>分类: </span>
-                <span className='category-content'>
-                    {/* {
+                <div className='type'>
+                    分类: </div>
+                <div className="category-type-list">
+                    {
                         typeList.map((item,index) => 
-                            <div className="" key={index}>
-                                <span>{item.type}</span>
-                            </div>
-                    )} */}
-                    <a>
-                    爱情  |   喜剧  |   动画  |   剧情  |   恐怖  |   惊悚  |   科幻  |   动作  |   悬疑  |   犯罪  |   冒险  |   战争  |   武侠  |   历史  |   传记  |   歌舞
-                    纪录片  |  音乐  |  灾难  |  青春  |  儿童  |  其他</a>
-                </span>
+                            <a key={index} onClick={()=>{ MoviesByCategory(item.categoryId,1) }}>
+                                <span className='category-content'>{item.categoryName}</span>
+                                <span>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</span>
+                            </a>
+                        )}
+                </div>
             </div>
             <div className="movies-category">
                 {
@@ -46,7 +69,7 @@ const MovieByCategory = () => {
                         </div>
                 )}
             </div>
-            <Pagination defaultCurrent={1} total={50} pageSize={12} onChange={getNewMoviesByPage}/>
+            <Pagination defaultCurrent={1} total={total} pageSize={12} onChange={getNewMoviesByPage}/>
         </div>
     );
 };

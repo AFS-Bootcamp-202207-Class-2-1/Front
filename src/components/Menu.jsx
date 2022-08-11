@@ -42,7 +42,7 @@ const Menu = () => {
                   "male" ? (
                   <img src={boy} alt="" width="35px" height="35px" />
                 ) : (
-                  <img src={girl} alt="" width="35px" height="35px" />
+                  <img src={girl} alt="" width="38px" height="38px" />
                 )}
               </Button>
               {sessionStorage.getItem("user") == null
