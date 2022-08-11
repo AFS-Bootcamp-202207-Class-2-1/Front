@@ -35,14 +35,14 @@ const Menu = () => {
           </Col>
           <Col span={3} offset={5}>
             <a href="/login" className="login">
-              <Button shape="circle" size="large">
+              <Button className="user-btn" shape="circle" size="large">
                 {JSON.parse(sessionStorage.getItem("user")) === null ? (
                   <UserOutlined />
                 ) : JSON.parse(sessionStorage.getItem("user")).userGender ===
-                  "female" ? (
-                  <img src={boy} alt="" width="30px" height="30px" />
+                  "male" ? (
+                  <img src={boy} alt="" width="35px" height="35px" />
                 ) : (
-                  <img src={girl} alt="" width="30px" height="30px" />
+                  <img src={girl} alt="" width="35px" height="35px" />
                 )}
               </Button>
               {sessionStorage.getItem("user") == null
