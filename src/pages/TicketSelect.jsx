@@ -13,9 +13,7 @@ import { changeVisible } from '../components/MovieSlice'
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 
-
 const TicketSelect = () => {
-
     const [sessionList,setSessionList] = useState([])
     const [sessionSeats,setSessionSeats] = useState([])
     const [session, setSession] = useState({});
@@ -29,24 +27,14 @@ const TicketSelect = () => {
     const [selectedState, setSelectedState] = useState(new Array(24).fill(false))
     const [selectedSeatIds, setSelectedSeatIds] = useState({});
     const [seatInfoTable,setSeatInfoTable] = useState({})
+    const [cinemaSite, setCinemaSite] = useState("")
     const dispatch = useDispatch();
     const navigate = useNavigate() 
-
     const { id } = useParams();
+    var local = null;
+    var map = null;
 
     useEffect(() => {
-        var map = new BMapGL.Map("map");
-        map.centerAndZoom(new BMapGL.Point(113.581409, 22.378911),11);
-        map.enableScrollWheelZoom(true);
-        map.clearOverlays();
-        var new_point = new BMapGL.Point(113.581409, 22.378911);
-        var marker = new BMapGL.Marker(new_point);  // 创建标注
-        map.addOverlay(marker);
-        map.panTo(new_point)
-        var local = new BMapGL.LocalSearch(map, {
-          renderOptions:{map: map}
-       });
-       local.search("海上影城(格力)");
         getMovieDetail(id).then(async(response) => {
             setDetails(response.data)
         });
@@ -54,7 +42,19 @@ const TicketSelect = () => {
             await setSessionList(response.data)
             return response.data
         }).then(async (response)=>{
-            await setSession(response[0])
+            await setSession(response[0]) 
+            map = new BMapGL.Map("map");
+            map.centerAndZoom(new BMapGL.Point(113.581409, 22.378911),11);
+            map.enableScrollWheelZoom(true);
+            // map.clearOverlays();
+            var new_point = new BMapGL.Point(113.581409, 22.378911);
+            var marker = new BMapGL.Marker(new_point);  // 创建标注
+            map.addOverlay(marker);
+            map.panTo(new_point)
+            local = new BMapGL.LocalSearch(map, {
+                    renderOptions:{map: map}
+                });
+            local.search(response[0].cinemaName);
             await getSessionSeats(response[0].cinemaMovieTimeId).then((response) => {
                 setSessionSeats(response.data)
             })
@@ -76,9 +76,23 @@ const TicketSelect = () => {
         setSeatInfo("还未选择座位")
         for(var i = 0; i < selectedState.length; i++){
             selectedState[i] = false;
-            
         }
         setSelectedState([...selectedState]);
+        setCinemaSite(sessionList[index].cinemaName);
+        map = new BMapGL.Map("map");
+        map.centerAndZoom(new BMapGL.Point(113.581409, 22.378911),11);
+        map.enableScrollWheelZoom(true);
+        // map.clearOverlays();
+        var new_point = new BMapGL.Point(113.581409, 22.378911);
+        var marker = new BMapGL.Marker(new_point);  // 创建标注
+        map.addOverlay(marker);
+        map.panTo(new_point)
+        
+        local = new BMapGL.LocalSearch(map, {
+            renderOptions:{map: map}
+         });
+        local.search(sessionList[index].cinemaName)
+        
         await getSessionSeats(sessionList[index].cinemaMovieTimeId).then((response) => {
             setSessionSeats(response.data)
         })
@@ -140,7 +154,7 @@ const TicketSelect = () => {
                         <div className='session-selector'>
                             {
                                 sessionList.map((item,index) => (
-                                    <Button className='' key={index} value={item} onClick={()=>{ selectSession(item.cinemaMovieTimeId, index) }}>
+                                    <Button className='session' key={index} value={item} onClick={()=>{ selectSession(item.cinemaMovieTimeId, index) }}>
                                         {item.cinemaName} {item.cinemaMovieTimeWatchtime} ~ {moment(item.cinemaMovieTimeEndtime).format("HH:mm")}
                                     </Button>
                             ))}
