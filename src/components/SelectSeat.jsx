@@ -117,7 +117,7 @@ function SelectSeat(props) {
                     <div>原价：￥{session.cinemaMovieTimePrice} × {count}</div>
                     <div>总计：{count * session.cinemaMovieTimePrice}</div>
                 </div>
-                <Button size='large' onClick={() => { showModal(session, seatInfo, count, Object.values(selectedSeatIds)) }}>确认下单</Button>
+                <Button size='large' disabled={count===0? true : false} onClick={() => { showModal(session, seatInfo, count, Object.values(selectedSeatIds)) }}>确认下单</Button>
             </div>
         </div>
     )

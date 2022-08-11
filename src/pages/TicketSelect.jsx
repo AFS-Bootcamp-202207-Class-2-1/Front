@@ -1,7 +1,7 @@
 import React from 'react';
 import '../assets/less/ticketSession.less'
 import { useState,useEffect } from 'react';
-import { Button,DatePicker, Modal  } from "antd";
+import { Button,DatePicker, Modal,message  } from "antd";
 import { useParams } from 'react-router-dom'
 import { getSessions,getMovieDetail,getSessionSeats } from '../api/ticketSelect'
 import { postOrder } from '../api/order'
@@ -10,6 +10,7 @@ import OrderDetails from '../components/OrderDetails'
 import TicketAnimation from '../components/TicketAnimation';
 import { useDispatch } from 'react-redux';
 import { changeVisible } from '../components/MovieSlice'
+import { useNavigate } from 'react-router-dom';
 
 const TicketSelect = () => {
 
@@ -23,6 +24,7 @@ const TicketSelect = () => {
     const [seatInfo, setSeatInfo] = useState("");
     const [seatIds, setSeatIds] = useState([]);
     const dispatch = useDispatch();
+    const navigate = useNavigate() 
 
     const { id } = useParams();
 
@@ -41,6 +43,10 @@ const TicketSelect = () => {
             })
         })
     }, [])
+
+    const error = () => {
+        message.error("请登录后购票");
+      };
 
     const onChange = (date, dateString) => {
         console.log(date, dateString);
@@ -62,6 +68,10 @@ const TicketSelect = () => {
     
     const handleOk = () => {
         setConfirmLoading(true);
+        if(sessionStorage.getItem("user") === null){
+            navigate('/login');
+            error()
+        }
         const usersId = parseInt(JSON.parse(sessionStorage.getItem("user")).userId)
         const ticketPrice = session.cinemaMovieTimePrice * count;
         const movieId = details.movieId
@@ -108,18 +118,18 @@ const TicketSelect = () => {
                     {details.movieScore}
                 </div>
             </div>
-         <SelectSeat seatList={sessionSeats} showModal={showModal}  session = {session} details= {details}/>
-         <Modal
-            title="确认订单"
-            visible={visible}
-            onOk={handleOk}
-            confirmLoading={confirmLoading}
-            onCancel={handleCancel}
-            okText="确认"
-            cancelText="取消"
-        >
-         <OrderDetails details= {details} session = { session} count = {count} seatInfo={seatInfo}/>
-      </Modal>
+            <SelectSeat seatList={sessionSeats} showModal={showModal}  session = {session} details= {details}/>
+            <Modal
+                title="确认订单"
+                visible={visible}
+                onOk={handleOk}
+                confirmLoading={confirmLoading}
+                onCancel={handleCancel}
+                okText="确认"
+                cancelText="取消"
+            >
+                <OrderDetails details= {details} session = { session} count = {count} seatInfo={seatInfo}/>
+            </Modal>
         </div>
     );
 };
