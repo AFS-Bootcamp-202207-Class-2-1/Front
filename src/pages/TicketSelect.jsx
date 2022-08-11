@@ -23,8 +23,12 @@ const TicketSelect = () => {
     const [visible, setVisible] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [count, setCount] = useState(0);
+    const [orderCount, setOrderCount] = useState(0);
     const [seatInfo, setSeatInfo] = useState("还未选择座位");
     const [seatIds, setSeatIds] = useState([]);
+    const [selectedState, setSelectedState] = useState(new Array(24).fill(false))
+    const [selectedSeatIds, setSelectedSeatIds] = useState({});
+    const [seatInfoTable,setSeatInfoTable] = useState({})
     const dispatch = useDispatch();
     const navigate = useNavigate() 
 
@@ -38,8 +42,8 @@ const TicketSelect = () => {
             await setSessionList(response.data)
             return response.data
         }).then(async (response)=>{
-            await setSession(response[1])
-            await getSessionSeats(response[1].cinemaMovieTimeId).then((response) => {
+            await setSession(response[0])
+            await getSessionSeats(response[0].cinemaMovieTimeId).then((response) => {
                 setSessionSeats(response.data)
             })
         })
@@ -55,12 +59,18 @@ const TicketSelect = () => {
         setSeatInfo(message)
     }
 
-    const selectSession = (id, index) => {
-        setSession(sessionList[index])
+    const selectSession = async (id, index) => {
+        await setSession(sessionList[index])
         setSeatInfo("还未选择座位")
-        getSessionSeats(id).then((response) => {
+        for(var i = 0; i < selectedState.length; i++){
+            selectedState[i] = false;
+            
+        }
+        setSelectedState([...selectedState]);
+        await getSessionSeats(sessionList[index].cinemaMovieTimeId).then((response) => {
             setSessionSeats(response.data)
         })
+        setCount(0)
     }
 
     const showModal = (session, seatInfo, count, seatIds) => {
@@ -68,6 +78,7 @@ const TicketSelect = () => {
         setCount(count);
         setVisible(true);
         setSeatIds(seatIds);
+        setOrderCount(count);
       };
     
     const handleOk = () => {
@@ -84,32 +95,28 @@ const TicketSelect = () => {
         const boughtSeatIdList = seatIds
         const order = { ticketPrice, usersId, cinemaId,movieId, cinemaMovieTimeId, boughtSeatIdList }
 
-        postOrder(order).then((response)=>{
-            console.log(response)
+        postOrder(order).then(async(response)=>{
             setVisible(false);
             setConfirmLoading(false);
             dispatch(changeVisible());
-            getSessions(id).then(async (response) => {
-                await setSessionList(response.data)
-                return response.data
-            }).then(async (response)=>{
-                await setSession(response[1])
-                await getSessionSeats(response[1].cinemaMovieTimeId).then((response) => {
-                    setSessionSeats(response.data)
-                })
+            await getSessionSeats(session.cinemaMovieTimeId).then((response) => {
+                setSessionSeats(response.data)
             })
+            setSeatInfo("还未选择座位")
+            setCount(0)
+            setSelectedSeatIds({});
+            setSeatInfoTable({})
         })
     };
     
     const handleCancel = () => {
-        console.log('Clicked cancel button');
         setVisible(false);
     };
     
 
     return (
          <div>
-            <TicketAnimation session={session} details={details} seatInfo={seatInfo} count={count}/>
+            <TicketAnimation session={session} details={details} seatInfo={seatInfo} count={orderCount}/>
             <div className="Detail-Movie">
                 <img className='movie-cover' src={details.movieImage} alt="cover" />
                 <div className="DetailIntroduce">
@@ -132,7 +139,7 @@ const TicketSelect = () => {
                     {details.movieScore}
                 </div>
             </div>
-            <SelectSeat seatList={sessionSeats} showModal={showModal}  session = {session} details= {details} seatInfos = {seatInfo} updateSeatInfo= {updateSeatInfo} />
+            <SelectSeat seatList={sessionSeats} showModal={showModal}  session = {session} details= {details} seatInfos = {seatInfo} updateSeatInfo= {updateSeatInfo} selectedState={selectedState} count = {count} setCount = {setCount} selectedSeatIds={selectedSeatIds} seatInfoTable={seatInfoTable}/>
             <Modal
                 title="确认订单"
                 visible={visible}
@@ -142,7 +149,7 @@ const TicketSelect = () => {
                 okText="确认"
                 cancelText="取消"
             >
-                <OrderDetails details= {details} session = { session} count = {count} seatInfo={seatInfo}/>
+                <OrderDetails details= {details} session = { session} count = {orderCount} seatInfo={seatInfo} />
             </Modal>
         </div>
     );
