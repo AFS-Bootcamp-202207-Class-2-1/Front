@@ -9,16 +9,10 @@ import  selected from "../assets/images/select.png"
 
 function SelectSeat(props) {
 
-    const { seatList, showModal, session, details, seatInfos, updateSeatInfo} = props
+    const { seatList, showModal, session, details, seatInfos, updateSeatInfo, selectedState, count, setCount, selectedSeatIds, seatInfoTable } = props
     seatList.sort((seat1, seat2) => {
         return seat1.seatId - seat2.seatId
     })
-    const [selectedSeatIds, setSelectedSeatIds] = useState({});
-    const [seatInfoTable,setSeatInfoTable] = useState({})
-    const [selectedState ] = useState(new Array(24).fill(false))
-
-
-    const [ count, setCount ] = useState(0);
 
     const select = (index) => {
         if(seatList[index].seatReserve === false ){
