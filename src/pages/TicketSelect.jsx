@@ -3,13 +3,14 @@ import '../assets/less/ticketSession.less'
 import { useState,useEffect } from 'react';
 import { Button,DatePicker, Modal  } from "antd";
 import { useParams } from 'react-router-dom'
-import { getSessions,getMovieDetail,getSessionSeats } from '../api/ticketSelect'
+import { getSessions,getMovieDetail,getSessionSeats,getSessionByDate } from '../api/ticketSelect'
 import { postOrder } from '../api/order'
 import SelectSeat from '../components/SelectSeat';
 import OrderDetails from '../components/OrderDetails'
 import TicketAnimation from '../components/TicketAnimation';
 import { useDispatch } from 'react-redux';
 import { changeVisible } from '../components/MovieSlice'
+import moment from 'moment';
 
 const TicketSelect = () => {
 
@@ -42,8 +43,10 @@ const TicketSelect = () => {
         })
     }, [])
 
-    const onChange = (date, dateString) => {
-        console.log(date, dateString);
+    const onChange = (date) => {
+        getSessionByDate(id, moment(date).format('yyyy-MM-DD')).then((response) => {
+            setSessionList(response.data)
+        })
     };
 
     const selectSession = (id, index) => {
@@ -99,7 +102,9 @@ const TicketSelect = () => {
                         <div className='session-selector'>
                             {
                                 sessionList.map((item,index) => (
-                                    <Button key={index} value={item} onClick={()=>{ selectSession(item.cinemaMovieTimeId, index) }}>{item.cinemaName} {item.cinemaMovieTimeWatchtime} {item.cinemaMovieTimeEndtime}</Button>
+                                    <Button className='' key={index} value={item} onClick={()=>{ selectSession(item.cinemaMovieTimeId, index) }}>
+                                        {item.cinemaName} {item.cinemaMovieTimeWatchtime} ~ {moment(item.cinemaMovieTimeEndtime).format("HH:mm")}
+                                    </Button>
                             ))}
                         </div>
                     </div>
