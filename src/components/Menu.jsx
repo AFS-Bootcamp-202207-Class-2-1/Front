@@ -4,6 +4,8 @@ import IndexLogo from "../assets/images/logo.png";
 import "../assets/less/menu.less";
 import { Col, Row, Button } from "antd";
 import { UserOutlined } from "@ant-design/icons";
+import boy from "../assets/images/boy.png";
+import girl from "../assets/images/girl.png";
 
 const Menu = () => {
   return (
@@ -33,11 +35,16 @@ const Menu = () => {
           </Col>
           <Col span={3} offset={5}>
             <a href="/login" className="login">
-              <Button
-                icon={<UserOutlined />}
-                shape="circle"
-                size="large"
-              ></Button>
+              <Button shape="circle" size="large">
+                {JSON.parse(sessionStorage.getItem("user")) === null ? (
+                  <UserOutlined />
+                ) : JSON.parse(sessionStorage.getItem("user")).userGender ===
+                  "female" ? (
+                  <img src={boy} alt="" width="30px" height="30px" />
+                ) : (
+                  <img src={girl} alt="" width="30px" height="30px" />
+                )}
+              </Button>
               {sessionStorage.getItem("user") == null
                 ? "登录"
                 : JSON.parse(sessionStorage.getItem("user")).userName}
