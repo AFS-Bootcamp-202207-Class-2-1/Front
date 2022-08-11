@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Row, Col, Modal } from "antd";
+import { Card, Row, Col, Modal, Button, Input } from "antd";
 import "../assets/less/orderPage.less";
 import { useEffect } from "react";
 import { getTicketInfo, deleteTicket } from "../api/ticketInfo";
@@ -8,6 +8,27 @@ import { DeleteOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 export default function OrderPage() {
   const { confirm } = Modal;
   const [ticketInfo, setTicketInfo] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [modalText, setModalText] = useState("Content of the modal");
+
+  const showModal = () => {
+    setVisible(true);
+  };
+
+  const handleOk = () => {
+    setModalText("The modal will be closed after two seconds");
+    setConfirmLoading(true);
+    setTimeout(() => {
+      setVisible(false);
+      setConfirmLoading(false);
+    }, 2000);
+  };
+
+  const handleCancel = () => {
+    console.log("Clicked cancel button");
+    setVisible(false);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,7 +52,7 @@ export default function OrderPage() {
   const showDeleteConfirm = (id) => {
     confirm({
       icon: <ExclamationCircleOutlined />,
-      content: "您确定要删除该订单吗？删除后，不可恢复~",
+      content: "您确定要退票吗？",
       okText: "Yes",
       okType: "danger",
       cancelText: "No",
@@ -54,9 +75,6 @@ export default function OrderPage() {
             <Card
               style={{ marginTop: 16 }}
               type="inner"
-              // title={`${ticketInfo[index].ticketBuytime.substring(0, 10)}
-              //   imovie订单号:
-              //   ${ticketInfo[index].ticketUuid}`}
               title={
                 <div>
                   <span className="buyTime">
@@ -102,14 +120,25 @@ export default function OrderPage() {
                 <Col className="gutter-row" span={6}>
                   <div className="price">¥{ticketInfo[index].ticketPrice}</div>
                 </Col>
-                {/* <Col className="gutter-row" span={6}>
-                  <div className="status">col-6</div>
-                </Col> */}
+                <Col className="gutter-row" span={6}>
+                  <Button type="primary" onClick={showModal}>
+                    Comment
+                  </Button>
+                </Col>
               </Row>
             </Card>
           );
         })}
       </Card>
+      <Modal
+        title="Comment"
+        visible={visible}
+        onOk={handleOk}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}
+      >
+        <Input placeholder="Please input your comment" />
+      </Modal>
     </div>
   );
 }
