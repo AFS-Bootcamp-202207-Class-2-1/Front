@@ -3,7 +3,7 @@ import '../assets/less/OrderDetails.less'
 
 const OrderDetails = (props) => {
     const { details, session, count,seatInfo} = props;
-    console.log(props)
+
     return (
         <div className="orderDetails-movie">
             <img className='orderDetails-cover' src={details.movieImage} alt="cover" />

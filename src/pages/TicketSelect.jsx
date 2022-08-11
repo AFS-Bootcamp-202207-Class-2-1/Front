@@ -12,6 +12,7 @@ import { useDispatch } from 'react-redux';
 import { changeVisible } from '../components/MovieSlice'
 import { useNavigate } from 'react-router-dom';
 
+
 const TicketSelect = () => {
 
     const [sessionList,setSessionList] = useState([])
@@ -21,7 +22,7 @@ const TicketSelect = () => {
     const [visible, setVisible] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [count, setCount] = useState(0);
-    const [seatInfo, setSeatInfo] = useState("");
+    const [seatInfo, setSeatInfo] = useState("还未选择座位");
     const [seatIds, setSeatIds] = useState([]);
     const dispatch = useDispatch();
     const navigate = useNavigate() 
@@ -34,7 +35,6 @@ const TicketSelect = () => {
         });
          getSessions(id).then(async (response) => {
             await setSessionList(response.data)
-            // await setCinemaMovieTimePrice(response.data[1].cinemaMovieTimePrice)
             return response.data
         }).then(async (response)=>{
             await setSession(response[1])
@@ -52,8 +52,13 @@ const TicketSelect = () => {
         console.log(date, dateString);
     };
 
+    const updateSeatInfo = (message) => {
+        setSeatInfo(message)
+    }
+
     const selectSession = (id, index) => {
         setSession(sessionList[index])
+        setSeatInfo("还未选择座位")
         getSessionSeats(id).then((response) => {
             setSessionSeats(response.data)
         })
@@ -85,8 +90,16 @@ const TicketSelect = () => {
             setVisible(false);
             setConfirmLoading(false);
             dispatch(changeVisible());
+            getSessions(id).then(async (response) => {
+                await setSessionList(response.data)
+                return response.data
+            }).then(async (response)=>{
+                await setSession(response[1])
+                await getSessionSeats(response[1].cinemaMovieTimeId).then((response) => {
+                    setSessionSeats(response.data)
+                })
+            })
         })
-
     };
     
     const handleCancel = () => {
@@ -118,7 +131,7 @@ const TicketSelect = () => {
                     {details.movieScore}
                 </div>
             </div>
-            <SelectSeat seatList={sessionSeats} showModal={showModal}  session = {session} details= {details}/>
+            <SelectSeat seatList={sessionSeats} showModal={showModal}  session = {session} details= {details} seatInfos = {seatInfo} updateSeatInfo= {updateSeatInfo} />
             <Modal
                 title="确认订单"
                 visible={visible}

@@ -9,11 +9,10 @@ import  selected from "../assets/images/select.png"
 
 function SelectSeat(props) {
 
-    const { seatList, showModal, session, details} = props
+    const { seatList, showModal, session, details, seatInfos, updateSeatInfo} = props
     seatList.sort((seat1, seat2) => {
         return seat1.seatId - seat2.seatId
     })
-    const [seatInfo, setSeatInfo] = useState("还未选择座位")
     const [selectedSeatIds, setSelectedSeatIds] = useState({});
     const [seatInfoTable,setSeatInfoTable] = useState({})
     const [selectedState ] = useState(new Array(24).fill(false))
@@ -35,7 +34,7 @@ function SelectSeat(props) {
                 })
                 setCount(count + 1);
                 message = message.slice(0,message.length - 3);
-                setSeatInfo(message)
+                updateSeatInfo(message)
                 
             } else {
                 selectedState[index] = false;
@@ -50,9 +49,9 @@ function SelectSeat(props) {
                 })
                 message = message.slice(0,message.length - 3);
                 if(message.length === 0){
-                    setSeatInfo("还未选择座位")
+                    updateSeatInfo("还未选择座位")
                 } else {
-                    setSeatInfo(message)
+                    updateSeatInfo(message)
                 }
                 
             }
@@ -111,13 +110,13 @@ function SelectSeat(props) {
                     <div><span>影院:</span> {session.cinemaName}</div>
                     <div><span>版本:</span> {details.movieVersion}</div>
                     <div><span>场次：</span>{session.cinemaMovieTimeWatchtime}</div>
-                    <div><span>座位：{seatInfo}</span></div>
+                    <div><span>座位：{seatInfos}</span></div>
                 </div>
                 <div className='price'>
                     <div>原价：￥{session.cinemaMovieTimePrice} × {count}</div>
                     <div>总计：{count * session.cinemaMovieTimePrice}</div>
                 </div>
-                <Button size='large' disabled={count===0? true : false} onClick={() => { showModal(session, seatInfo, count, Object.values(selectedSeatIds)) }}>确认下单</Button>
+                <Button size='large' disabled={count===0? true : false} onClick={() => { showModal(session, seatInfos, count, Object.values(selectedSeatIds)) }}>确认下单</Button>
             </div>
         </div>
     )

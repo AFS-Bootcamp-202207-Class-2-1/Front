@@ -3,7 +3,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom'
 import '../assets/less/movieCatagory.less';
 import movieCategory from '../assets/iconfont/category.png';
-import { getMoviesByPage,getMoviesByCategory,getAllMoviesType } from '../api/category';
+import { getMovies } from '../api';
 import { Pagination } from "antd";
 
 const MovieByCategory = () => {
@@ -11,41 +11,31 @@ const MovieByCategory = () => {
     const [typeList, setTypeList] = useState([]);
 
     useEffect(() => {
-        getMoviesByPage(1).then((response) => {
+        getMovies().then((response) => {
             setMovieList(response.data)
-        })
-        getAllMoviesType().then((response) => {
-            setTypeList(response.data)
         })
     }, [])
 
-    const getNewMoviesByPage = (id,page) => {
-        getMoviesByCategory(id,page).then((response) => {
-            setMovieList(response.data)
-        })
-    }
-
-    const MoviesByCategory = (id) => {
-        getMoviesByCategory(id,1).then((response) => {
-            setMovieList(response.data)
-        })
+    const getNewMoviesByPage = (pageSize) => {
+        console.log(pageSize)
     }
 
     return (
         <div>
             <div className="category-list">
                 <img src={movieCategory} alt="logo" className="movie-images-icon"/>
-                <div className='type'>
-                    分类: </div>
-                <div className="category-type-list">
-                    {
+                <span className='type'>分类: </span>
+                <span className='category-content'>
+                    {/* {
                         typeList.map((item,index) => 
-                            <a key={index} onClick={()=>{ getNewMoviesByPage(item.categoryId,1) }}>
-                                <span className='category-content'>{item.categoryName}</span>
-                                <span>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</span>
-                            </a>
-                        )}
-                </div>
+                            <div className="" key={index}>
+                                <span>{item.type}</span>
+                            </div>
+                    )} */}
+                    <a>
+                    爱情  |   喜剧  |   动画  |   剧情  |   恐怖  |   惊悚  |   科幻  |   动作  |   悬疑  |   犯罪  |   冒险  |   战争  |   武侠  |   历史  |   传记  |   歌舞
+                    纪录片  |  音乐  |  灾难  |  青春  |  儿童  |  其他</a>
+                </span>
             </div>
             <div className="movies-category">
                 {
