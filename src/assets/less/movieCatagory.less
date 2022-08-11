@@ -1,5 +1,6 @@
 .category-list {
-    height:144px;
+    display: flex;
+    height: 144px;
     background-color: #fff;
     width: 80%;
     border-radius: 20px;
@@ -9,13 +10,21 @@
         font-size: 20px;
         color: #364d79;
         font-weight: bold;
+        width: 80px;
+        margin: 10px 20px 0 5px;
+    }
+    span {
+        color: #364d79;
     }
     .movie-images-icon {
         width: 45px;
+        height: 45px;
     }    
     .category-content {
         font-size: 18px;
-        color: #364d79;
+    }
+    .category-type-list {
+        padding-top: 12px;
     }
 }
 .movies-category {
@@ -34,4 +43,8 @@
         font-size: 20px;
         color:#364d79;
     }
+}
+
+.category-content:hover {
+    font-weight: bold;
 }

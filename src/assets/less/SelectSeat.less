@@ -1,26 +1,31 @@
+@import url('../less/TicketAnimation.less');
 .seat-wapper {
     width: 1280px;
-    margin: 0 auto;
+    margin: 20px auto;
     display: flex;
     .Seat {
         width: 600px;
         height: 400px;
         background-color: white;
         text-align: center;
+        border-radius: 15px;
         border: 1px solid rgba(187, 187, 187, 100);
         display: inline-block;
         margin-left: 100px;
         margin-right: 70px;
-        .title {
-            font-size: 20px;
+        padding: 30px 0;
+        .cinema-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #364d79;
         }
         .seatBody {
             width: 70%;
-            margin: 60px auto;
+            margin: 30px auto;
         }
         .seat {
-            width: 40px;
-            height: 40px;
+            width: 38px;
+            height: 38px;
             margin: 10px 0;
         }
     }
@@ -30,6 +35,7 @@
         background-color: white;
         text-align: center;
         border: 1px solid rgba(187, 187, 187, 100);
+        border-radius: 15px;
         padding: 50px 0px 15px 0px;
         .info {
             width: 90%;
@@ -46,20 +52,21 @@
         }
         .price {
             width: 200px;
-            height: 100px;
+            height: 80px;
             border: 1px solid rgba(187, 187, 187, 100);
-            margin: 20px auto;
+            margin: 25px auto 10px auto;
             text-align: center;
-            padding-top: 20px;
+            padding-top: 10px;
             div {
                 padding-bottom: 10px;
             }
         }
         button {
-            font-size: 16px;
-            margin-top: 20px;
-            background-color:rgba(5, 68, 94, 94);
+            margin-top: 10px;
+            background-color: rgba(70, 75, 216, 100);
             color: white;
+            border-radius: 4px;
+            border: 1px solid rgba(187, 187, 187, 100);
         }
     }    
 }

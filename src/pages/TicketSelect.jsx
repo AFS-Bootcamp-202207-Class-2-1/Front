@@ -7,6 +7,9 @@ import { getSessions,getMovieDetail,getSessionSeats } from '../api/ticketSelect'
 import { postOrder } from '../api/order'
 import SelectSeat from '../components/SelectSeat';
 import OrderDetails from '../components/OrderDetails'
+import TicketAnimation from '../components/TicketAnimation';
+import { useDispatch } from 'react-redux';
+import { changeVisible } from '../components/MovieSlice'
 
 const TicketSelect = () => {
 
@@ -19,6 +22,7 @@ const TicketSelect = () => {
     const [count, setCount] = useState(0);
     const [seatInfo, setSeatInfo] = useState("");
     const [seatIds, setSeatIds] = useState([]);
+    const dispatch = useDispatch();
 
     const { id } = useParams();
 
@@ -68,11 +72,11 @@ const TicketSelect = () => {
 
         postOrder(order).then((response)=>{
             console.log(response)
-        })
-        setTimeout(() => {
             setVisible(false);
             setConfirmLoading(false);
-        }, 2000);
+            dispatch(changeVisible());
+        })
+
     };
     
     const handleCancel = () => {
@@ -83,6 +87,7 @@ const TicketSelect = () => {
 
     return (
          <div>
+            <TicketAnimation session={session} details={details} seatInfo={seatInfo} count={count}/>
             <div className="Detail-Movie">
                 <img className='movie-cover' src={details.movieImage} alt="cover" />
                 <div className="DetailIntroduce">
