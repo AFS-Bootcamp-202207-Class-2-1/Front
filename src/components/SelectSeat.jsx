@@ -62,44 +62,44 @@ function SelectSeat(props) {
     return (
         <div className='seat-wapper'>
             <div className='Seat'>
-                <div className='title'>{session.cinemaName}</div>
+                <div className='cinema-title'>{session.cinemaName}</div>
                 <div className='seatBody'>
-                    <Row gutter={[48,48]} align="middle" >
+                    <Row gutter={[30,30]} align="middle" >
                         <Col span={4} ><h2>1</h2></Col>
                         {
                             seatList.map((seat,index) => {
                                 if(index < 6 ){
-                                    return <Col span={3}> <img id={index} src={seatList[index].seatReserve === false ? unSold : sold} alt="" className='seat' onClick={() => select(index)}/></Col>
+                                    return <Col key={index} span={3}> <img id={index} src={seatList[index].seatReserve === false ? unSold : sold} alt="" className='seat' onClick={() => select(index)}/></Col>
                                 }
                             })
                         }
                     </Row>
-                    <Row gutter={[48,48]} align="middle">
+                    <Row gutter={[30,30]} align="middle">
                         <Col span={4} ><h2>2</h2></Col>
                         {
                             seatList.map((seat,index) => {
                                 if( index >= 6 && index < 12 ){
-                                    return <Col span={3}><img id={index} src={seatList[index].seatReserve === false ? unSold : sold} alt="" className='seat' onClick={() => select(index)}/></Col>
+                                    return <Col key={index} span={3}><img id={index} src={seatList[index].seatReserve === false ? unSold : sold} alt="" className='seat' onClick={() => select(index)}/></Col>
                                 }
                             })
                         }
                     </Row>
-                    <Row gutter={[48,48]} align="middle">
+                    <Row gutter={[30,30]} align="middle">
                         <Col span={4} ><h2>3</h2></Col>
                         {
                            seatList.map((seat,index) => {
                             if( index >= 12 && index < 18 ){
-                                return <Col span={3}><img id={index} src={seatList[index].seatReserve === false ? unSold : sold} alt="" className='seat' onClick={() => select(index)}/></Col>
+                                return <Col key={index} span={3}><img id={index} src={seatList[index].seatReserve === false ? unSold : sold} alt="" className='seat' onClick={() => select(index)}/></Col>
                             }
                         })
                         }
                     </Row>
-                    <Row gutter={[48,48]} align="middle">
+                    <Row gutter={[30,30]} align="middle">
                         <Col span={4} ><h2>4</h2></Col>
                         {
                             seatList.map((seat,index) => {
                                 if(index >= 18 && index < 24 ){
-                                    return <Col span={3}><img id={index} src={seatList[index].seatReserve === false ? unSold : sold} alt="" className='seat' onClick={() => select(index)}/></Col>
+                                    return <Col key={index} span={3}><img id={index} src={seatList[index].seatReserve === false ? unSold : sold} alt="" className='seat' onClick={() => select(index)}/></Col>
                                 }
                             })
                         }
@@ -117,7 +117,7 @@ function SelectSeat(props) {
                     <div>原价：￥{session.cinemaMovieTimePrice} × {count}</div>
                     <div>总计：{count * session.cinemaMovieTimePrice}</div>
                 </div>
-                <button onClick={() => { showModal(session, seatInfo, count, Object.values(selectedSeatIds)) }}>确认下单</button>
+                <Button size='large' onClick={() => { showModal(session, seatInfo, count, Object.values(selectedSeatIds)) }}>确认下单</Button>
             </div>
         </div>
         

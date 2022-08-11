@@ -19,7 +19,7 @@ const MovieByCategory = () => {
         })
     }, [])
 
-    const getNewMoviesByPage = (page) => {
+    const getNewMoviesByPage = (id,page) => {
         getMoviesByCategory(id,page).then((response) => {
             setMovieList(response.data)
         })
@@ -35,12 +35,14 @@ const MovieByCategory = () => {
         <div>
             <div className="category-list">
                 <img src={movieCategory} alt="logo" className="movie-images-icon"/>
-                <div className='type'>分类: </div>
+                <div className='type'>
+                    分类: </div>
                 <div className="category-type-list">
                     {
                         typeList.map((item,index) => 
-                            <a className='category-content' onClick={()=>{ MoviesByCategory(item.categoryId) }}>
-                                <span key={index}>{item.categoryName} |  </span>
+                            <a key={index} onClick={()=>{ getNewMoviesByPage(item.categoryId,1) }}>
+                                <span className='category-content'>{item.categoryName}</span>
+                                <span>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</span>
                             </a>
                         )}
                 </div>
