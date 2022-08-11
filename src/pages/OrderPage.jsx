@@ -31,7 +31,7 @@ export default function OrderPage() {
   const showDeleteConfirm = (id) => {
     confirm({
       icon: <ExclamationCircleOutlined />,
-      content: "您确定要删除该订单吗？删除后，不可恢复~",
+      content: "您确定要退票吗？",
       okText: "Yes",
       okType: "danger",
       cancelText: "No",
@@ -54,9 +54,6 @@ export default function OrderPage() {
             <Card
               style={{ marginTop: 16 }}
               type="inner"
-              // title={`${ticketInfo[index].ticketBuytime.substring(0, 10)}
-              //   imovie订单号:
-              //   ${ticketInfo[index].ticketUuid}`}
               title={
                 <div>
                   <span className="buyTime">

@@ -1,7 +1,7 @@
 import React from 'react';
 import '../assets/less/ticketSession.less'
 import { useState,useEffect } from 'react';
-import { Button,DatePicker, Modal  } from "antd";
+import { Button,DatePicker, Modal,message  } from "antd";
 import { useParams } from 'react-router-dom'
 import { getSessions,getMovieDetail,getSessionSeats,getSessionByDate } from '../api/ticketSelect'
 import { postOrder } from '../api/order'
@@ -11,6 +11,8 @@ import TicketAnimation from '../components/TicketAnimation';
 import { useDispatch } from 'react-redux';
 import { changeVisible } from '../components/MovieSlice'
 import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
+
 
 const TicketSelect = () => {
 
@@ -21,9 +23,10 @@ const TicketSelect = () => {
     const [visible, setVisible] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [count, setCount] = useState(0);
-    const [seatInfo, setSeatInfo] = useState("");
+    const [seatInfo, setSeatInfo] = useState("还未选择座位");
     const [seatIds, setSeatIds] = useState([]);
     const dispatch = useDispatch();
+    const navigate = useNavigate() 
 
     const { id } = useParams();
 
@@ -33,7 +36,6 @@ const TicketSelect = () => {
         });
          getSessions(id).then(async (response) => {
             await setSessionList(response.data)
-            // await setCinemaMovieTimePrice(response.data[1].cinemaMovieTimePrice)
             return response.data
         }).then(async (response)=>{
             await setSession(response[1])
@@ -49,8 +51,13 @@ const TicketSelect = () => {
         })
     };
 
+    const updateSeatInfo = (message) => {
+        setSeatInfo(message)
+    }
+
     const selectSession = (id, index) => {
         setSession(sessionList[index])
+        setSeatInfo("还未选择座位")
         getSessionSeats(id).then((response) => {
             setSessionSeats(response.data)
         })
@@ -65,6 +72,10 @@ const TicketSelect = () => {
     
     const handleOk = () => {
         setConfirmLoading(true);
+        if(sessionStorage.getItem("user") === null){
+            navigate('/login');
+            error()
+        }
         const usersId = parseInt(JSON.parse(sessionStorage.getItem("user")).userId)
         const ticketPrice = session.cinemaMovieTimePrice * count;
         const movieId = details.movieId
@@ -78,8 +89,16 @@ const TicketSelect = () => {
             setVisible(false);
             setConfirmLoading(false);
             dispatch(changeVisible());
+            getSessions(id).then(async (response) => {
+                await setSessionList(response.data)
+                return response.data
+            }).then(async (response)=>{
+                await setSession(response[1])
+                await getSessionSeats(response[1].cinemaMovieTimeId).then((response) => {
+                    setSessionSeats(response.data)
+                })
+            })
         })
-
     };
     
     const handleCancel = () => {
@@ -113,18 +132,18 @@ const TicketSelect = () => {
                     {details.movieScore}
                 </div>
             </div>
-         <SelectSeat seatList={sessionSeats} showModal={showModal}  session = {session} details= {details}/>
-         <Modal
-            title="确认订单"
-            visible={visible}
-            onOk={handleOk}
-            confirmLoading={confirmLoading}
-            onCancel={handleCancel}
-            okText="确认"
-            cancelText="取消"
-        >
-         <OrderDetails details= {details} session = { session} count = {count} seatInfo={seatInfo}/>
-      </Modal>
+            <SelectSeat seatList={sessionSeats} showModal={showModal}  session = {session} details= {details} seatInfos = {seatInfo} updateSeatInfo= {updateSeatInfo} />
+            <Modal
+                title="确认订单"
+                visible={visible}
+                onOk={handleOk}
+                confirmLoading={confirmLoading}
+                onCancel={handleCancel}
+                okText="确认"
+                cancelText="取消"
+            >
+                <OrderDetails details= {details} session = { session} count = {count} seatInfo={seatInfo}/>
+            </Modal>
         </div>
     );
 };
