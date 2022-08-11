@@ -58,6 +58,7 @@ const MovieByCategory = () => {
                                 <span>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</span>
                             </a>
                         )}
+                    <a onClick={()=>{ setCategoryId(0);getNewMoviesByPage(1) }}>全部</a>
                 </div>
             </div>
             <div className="movies-category">
