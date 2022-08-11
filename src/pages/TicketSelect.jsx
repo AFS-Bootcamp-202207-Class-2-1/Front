@@ -35,6 +35,18 @@ const TicketSelect = () => {
     const { id } = useParams();
 
     useEffect(() => {
+        var map = new BMapGL.Map("map");
+        map.centerAndZoom(new BMapGL.Point(113.581409, 22.378911),11);
+        map.enableScrollWheelZoom(true);
+        map.clearOverlays();
+        var new_point = new BMapGL.Point(113.581409, 22.378911);
+        var marker = new BMapGL.Marker(new_point);  // 创建标注
+        map.addOverlay(marker);
+        map.panTo(new_point)
+        var local = new BMapGL.LocalSearch(map, {
+          renderOptions:{map: map}
+       });
+       local.search("海上影城(格力)");
         getMovieDetail(id).then(async(response) => {
             setDetails(response.data)
         });
@@ -151,6 +163,7 @@ const TicketSelect = () => {
             >
                 <OrderDetails details= {details} session = { session} count = {orderCount} seatInfo={seatInfo} />
             </Modal>
+            <div id="map"></div>
         </div>
     );
 };
