@@ -155,10 +155,10 @@ export default function Register() {
             ]}
           >
             <Radio.Group>
-              <Radio value="female">
+              <Radio value="male">
                 <img src={boy} alt="" width="50px" height="50px" />
               </Radio>
-              <Radio value="male">
+              <Radio value="female">
                 <img src={girl} alt="" width="50px" height="50px" />
               </Radio>
             </Radio.Group>
