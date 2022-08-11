@@ -14,10 +14,10 @@ const Menu = () => {
         <Row>
           <Col span={5}>
             <div className="Logo">
-              <a href="/">
+              <NavLink to="/">
                 <img src={IndexLogo} alt="logo" height="70px" />
                 &nbsp;IMovie
-              </a>
+              </NavLink>
             </div>
           </Col>
           <Col span={11}>
@@ -34,7 +34,7 @@ const Menu = () => {
             </ul>
           </Col>
           <Col span={3} offset={5}>
-            <a href="/login" className="login">
+            <NavLink to="/login" className="login">
               <Button className="user-btn" shape="circle" size="large">
                 {JSON.parse(sessionStorage.getItem("user")) === null ? (
                   <UserOutlined />
@@ -48,7 +48,7 @@ const Menu = () => {
               {sessionStorage.getItem("user") == null
                 ? "登录"
                 : JSON.parse(sessionStorage.getItem("user")).userName}
-            </a>
+            </NavLink>
           </Col>
         </Row>
       </div>
