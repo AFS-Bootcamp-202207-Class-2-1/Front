@@ -68,10 +68,10 @@
     "workbox-webpack-plugin": "^6.4.1"
   },
   "scripts": {
-    "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
+    "start": "DISABLE_ESLINT_PLUGIN=true node scripts/start.js",
+    "build": "DISABLE_ESLINT_PLUGIN=true node scripts/build.js",
     "test": "",
-    "serve": "node serve.js"
+    "serve": "DISABLE_ESLINT_PLUGIN=true node serve.js"
   },
   "eslintConfig": {
     "extends": [
