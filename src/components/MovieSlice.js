@@ -4,14 +4,17 @@ const movieSlice = createSlice ({
     name: "Movie",
     initialState:{
         isVisible: false,
+        isMap:'none'
     },
     reducers:{
         changeVisible: (state,action) => {
             state.isVisible = !state.isVisible;
-            console.log(state.isVisible);
+        },
+        changeMapVisible: (state,action) => {
+            state.isMap = 'block';
         },
     }
 })
 
-export const { changeVisible } = movieSlice.actions;
+export const { changeVisible,changeMapVisible } = movieSlice.actions;
 export default movieSlice.reducer;

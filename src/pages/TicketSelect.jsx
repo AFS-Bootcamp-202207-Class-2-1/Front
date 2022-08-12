@@ -8,8 +8,8 @@ import { postOrder } from '../api/order'
 import SelectSeat from '../components/SelectSeat';
 import OrderDetails from '../components/OrderDetails'
 import TicketAnimation from '../components/TicketAnimation';
-import { useDispatch } from 'react-redux';
-import { changeVisible } from '../components/MovieSlice'
+import { useDispatch,useSelector } from 'react-redux';
+import { changeMapVisible } from '../components/MovieSlice'
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 
@@ -30,6 +30,7 @@ const TicketSelect = () => {
     const [cinemaSite, setCinemaSite] = useState("")
     const dispatch = useDispatch();
     const navigate = useNavigate() 
+    const isMap = useSelector((state) => state.movies.isMap)
     const { id } = useParams();
     var local = null;
     var map = null;
@@ -72,6 +73,7 @@ const TicketSelect = () => {
     }
 
     const selectSession = async (id, index) => {
+        dispatch(changeMapVisible());
         await setSession(sessionList[index])
         setSeatInfo("还未选择座位")
         for(var i = 0; i < selectedState.length; i++){
@@ -165,6 +167,7 @@ const TicketSelect = () => {
                     {details.movieScore}
                 </div>
             </div>
+            <div id="map" style={{display: isMap}}></div>
             <SelectSeat seatList={sessionSeats} showModal={showModal}  session = {session} details= {details} seatInfos = {seatInfo} updateSeatInfo= {updateSeatInfo} selectedState={selectedState} count = {count} setCount = {setCount} selectedSeatIds={selectedSeatIds} seatInfoTable={seatInfoTable}/>
             <Modal
                 title="确认订单"
@@ -177,7 +180,6 @@ const TicketSelect = () => {
             >
                 <OrderDetails details= {details} session = { session} count = {orderCount} seatInfo={seatInfo} />
             </Modal>
-            <div id="map"></div>
         </div>
     );
 };
