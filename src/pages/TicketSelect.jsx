@@ -9,7 +9,7 @@ import SelectSeat from '../components/SelectSeat';
 import OrderDetails from '../components/OrderDetails'
 import TicketAnimation from '../components/TicketAnimation';
 import { useDispatch,useSelector } from 'react-redux';
-import { changeMapVisible } from '../components/MovieSlice'
+import { changeMapVisible,changeVisible } from '../components/MovieSlice'
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 
@@ -82,18 +82,36 @@ const TicketSelect = () => {
         setSelectedState([...selectedState]);
         setCinemaSite(sessionList[index].cinemaName);
         map = new BMapGL.Map("map");
+        const mapList = { 
+            "海上影城(格力海岸店)":{
+                "x": 113.627044,
+                "y":22.355176 
+            },
+            "中影红星电影城(唐家店)":{
+                "x": 113.605141,
+                "y":22.365111 
+            },
+            "环球星梦国际影城":{
+                "x": 113.550343,
+                "y":22.386068 
+            }
+        };
         map.centerAndZoom(new BMapGL.Point(113.581409, 22.378911),11);
+        var p1 = new BMapGL.Point(113.581409, 22.378911);
+        var driving = new BMapGL.DrivingRoute(map, {renderOptions:{map: map, autoViewport: true}});
+        var p2 = new BMapGL.Point(mapList[sessionList[index].cinemaName].x,mapList[sessionList[index].cinemaName].y);
+        driving.search(p1, p2);
         map.enableScrollWheelZoom(true);
         // map.clearOverlays();
-        var new_point = new BMapGL.Point(113.581409, 22.378911);
-        var marker = new BMapGL.Marker(new_point);  // 创建标注
-        map.addOverlay(marker);
-        map.panTo(new_point)
+        // var new_point = new BMapGL.Point(113.581409, 22.378911);
+        // var marker = new BMapGL.Marker(new_point);  // 创建标注
+        // map.addOverlay(marker);
+        // map.panTo(new_point)
         
-        local = new BMapGL.LocalSearch(map, {
-            renderOptions:{map: map}
-         });
-        local.search(sessionList[index].cinemaName)
+        // local = new BMapGL.LocalSearch(map, {
+        //     renderOptions:{map: map}
+        //  });
+        // local.search(sessionList[index].cinemaName)
         
         await getSessionSeats(sessionList[index].cinemaMovieTimeId).then((response) => {
             setSessionSeats(response.data)
