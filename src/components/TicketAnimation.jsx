@@ -30,13 +30,6 @@ const TicketAnimation = (props) => {
                 <div>原价：￥{session.cinemaMovieTimePrice} × {count}</div>
                 <div>总计：{count * session.cinemaMovieTimePrice}</div>
             </div>
-            {/* <div className='info'>
-            <div>1张</div>
-            <div>8月8日（周一） 22:35</div>
-            <div>CV影城</div>
-            <div>原版2D</div>
-            <div>1排4座</div>
-            </div> */}
         </div>
     </div>
     );
